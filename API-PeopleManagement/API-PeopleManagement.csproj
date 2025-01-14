@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API-PeopleManagement.Infra.Data\API-PeopleManagement.Infra.Data.csproj" />
+    <ProjectReference Include="..\API-PeopleManagement.Service\API-PeopleManagement.Service.csproj" />
   </ItemGroup>
 
 </Project>

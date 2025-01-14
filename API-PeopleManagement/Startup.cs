@@ -1,4 +1,5 @@
 ﻿using API_PeopleManagement.Extensions;
+using API_PeopleManagement.Service.AutoMapper;
 
 namespace API_PeopleManagement
 {
@@ -9,22 +10,8 @@ namespace API_PeopleManagement
         {
             services.AddControllers();
             services.AddInfrastructure(configuration);
-            //services.AddApplication();
-            //services.AddAuth();
-            //services.AddHostedService<EvaluateCampaign>();
-            //services.AddHostedService<EvaluatePendingCampaign>();
-            //services.AddAutoMapper(typeof(Mappers));
-            //services.AddHttpClient("EvolutionAPI", client =>
-            //{
-            //    client.BaseAddress = new Uri("http://api:8080");
-            //});
-            //services.AddDistributedMemoryCache();
-            //services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromMinutes(30);
-            //    options.Cookie.HttpOnly = true;
-            //    options.Cookie.IsEssential = true;
-            //});
+            services.AddApplication();
+            services.AddAutoMapper(typeof(AutoMapperConfiguration));
             services.AddEndpointsApiExplorer();
             services.AddCors(options =>
             {

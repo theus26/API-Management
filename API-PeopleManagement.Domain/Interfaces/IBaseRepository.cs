@@ -4,9 +4,9 @@ namespace API_PeopleManagement.Domain.Interfaces
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
-        void Create(TEntity obj);
+        TEntity Create(TEntity obj);
 
-        void Update(TEntity obj);
+        TEntity Update(TEntity obj);
 
         void Delete(Guid id);
 

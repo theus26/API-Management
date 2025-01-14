@@ -4,32 +4,32 @@ using API_PeopleManagement.Infra.Data.Context;
 
 namespace API_PeopleManagement.Infra.Data.Repository
 {
-    public class BaseRepository<TEntity>(PeopleManagementContext Context) : IBaseRepository<TEntity> where TEntity : BaseEntity
+    public class BaseRepository<TEntity>(PeopleManagementContext context) : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly PeopleManagementContext Context = Context;
-
-        public void Create(TEntity obj)
+        public TEntity Create(TEntity obj)
         {
-            Context.Set<TEntity>().Add(obj);
-            Context.SaveChanges();
+            context.Set<TEntity>().Add(obj);
+            context.SaveChanges();
+            return obj;
         }
 
-        public void Update(TEntity obj)
+        public TEntity Update(TEntity obj)
         {
-            Context.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            Context.SaveChanges();
+            context.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.SaveChanges();
+            return obj;
         }
 
         public void Delete(Guid id)
         {
-            Context.Set<TEntity>().Remove(Get(id));
-            Context.SaveChanges();
+            context.Set<TEntity>().Remove(Get(id));
+            context.SaveChanges();
         }
 
         public IQueryable<TEntity> GetAll() =>
-            Context.Set<TEntity>().AsQueryable();
+            context.Set<TEntity>().AsQueryable();
 
         public TEntity Get(Guid id) =>
-            Context.Set<TEntity>().Find(id);
+            context.Set<TEntity>().Find(id);
     }
 }
