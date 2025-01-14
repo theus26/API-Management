@@ -32,11 +32,11 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpGet]
-    public IActionResult GetEmployeeById(Guid userId)
+    public IActionResult GetEmployeeById(Guid employeeId)
     {
         try
         {
-            var employee = employeeService.GetEmployeeById(userId);
+            var employee = employeeService.GetEmployeeById(employeeId);
             return Ok(employee);
         }
         catch (Exception ex)
