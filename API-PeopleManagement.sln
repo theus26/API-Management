@@ -11,15 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{0C57
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{779E7C53-F27C-48CC-8687-D47E23FE812E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-PeopleManagement", "API-PeopleManagement\API-PeopleManagement.csproj", "{7E5E322B-E417-4170-BCE8-22F3D58040A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API-PeopleManagement", "API-PeopleManagement\API-PeopleManagement.csproj", "{7E5E322B-E417-4170-BCE8-22F3D58040A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-PeopleManagement.Domain", "API-PeopleManagement.Domain\API-PeopleManagement.Domain.csproj", "{97C5DC60-0F4D-4902-A2DA-EAA41C75C5D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API-PeopleManagement.Domain", "API-PeopleManagement.Domain\API-PeopleManagement.Domain.csproj", "{97C5DC60-0F4D-4902-A2DA-EAA41C75C5D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{255D7D3E-D227-4DE8-B8DF-73935728BF2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-PeopleManagement.Infra.Data", "API-PeopleManagement.Infra.Data\API-PeopleManagement.Infra.Data.csproj", "{A3263674-1F6D-409C-B53F-232E4122706C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API-PeopleManagement.Infra.Data", "API-PeopleManagement.Infra.Data\API-PeopleManagement.Infra.Data.csproj", "{A3263674-1F6D-409C-B53F-232E4122706C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-PeopleManagement.Service", "API-PeopleManagement.Service\API-PeopleManagement.Service.csproj", "{2E8914A2-BF87-4892-808D-877AA0C63429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API-PeopleManagement.Service", "API-PeopleManagement.Service\API-PeopleManagement.Service.csproj", "{2E8914A2-BF87-4892-808D-877AA0C63429}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
