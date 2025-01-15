@@ -16,6 +16,12 @@ public class VacationService(IBaseRepository<VacationRecord> vacationRepository,
         {
             throw new ValidationException("vacation already exists");
         }
+
+        if (vacationRecordDto.VacationStatus is VacationStatus.Completed)
+        {
+            throw new ValidationException("It is not possible to register holidays with full status");
+        }
+        
         var vacation = mapper.Map<VacationRecord>(vacationRecordDto);
         Validate(vacation);
         var createdEmployee = vacationRepository.Create(vacation);
@@ -24,10 +30,23 @@ public class VacationService(IBaseRepository<VacationRecord> vacationRepository,
     
     private void Validate(VacationRecord vacationRecord)
     {
+        ValidateIntervalbetweenDatas(vacationRecord.VacationStartDate, vacationRecord.VacationeEndDate);
         var validationResult = employeeValidator.Validate(vacationRecord);
-
         if (validationResult.IsValid) return;
         var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
         throw new ValidationException($"Validation failed: {errors}");
+    }
+
+    private static void ValidateIntervalbetweenDatas(DateTime startDate, DateTime endDate)
+    {
+        if (endDate <= startDate)
+        {
+            throw new ArgumentException("The end date must be after the start date.");
+        }
+        var daysDifference = (endDate - startDate).TotalDays;
+        if (daysDifference is < 10 or > 30)
+        {
+            throw new ArgumentException($"The vacation period must be between 10 and 30 days, selected period - {daysDifference} days.");
+        }
     }
 }

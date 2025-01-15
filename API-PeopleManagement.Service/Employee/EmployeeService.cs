@@ -93,7 +93,13 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
             throw new KeyNotFoundException("Please, enter a valid employeeId ID");
         }
 
-        var employees = employeeRepository.Get(employeeId);
+        var employees = employeeRepository
+                    .GetAll()
+                    .AsNoTracking()
+                    .Where(x => x.Id == employeeId)
+                    .Include(x => x.VacationRecords)
+                    .FirstOrDefault();
+        
         if (employees is null)
         {
             throw new KeyNotFoundException("employee not found");
