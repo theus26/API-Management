@@ -21,7 +21,7 @@ Essa API foi desenvolvida para atender às necessidades de gestão de pessoal do
 1. Clone o repositório:
 
 ```
-git clone <url-do-repositorio>
+git clone https://github.com/theus26/API-Management.git
 ```
 
 2. Acesse o diretório do projeto:
