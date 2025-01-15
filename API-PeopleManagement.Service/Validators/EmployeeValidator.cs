@@ -17,7 +17,8 @@ public class EmployeeValidator : AbstractValidator<Employees>
 
         RuleFor(c => c.AdmissionDate)
             .NotEmpty().WithMessage("Please enter the Admission Date.")
-            .Must(date => date != DateTime.MinValue).WithMessage("Admission Date is invalid.");
+            .Must(date => date != DateTime.MinValue).WithMessage("Admission Date is invalid.")
+            .Must(date => date >= DateTime.Today).WithMessage("Admission Date cannot be earlier than today.");
 
         RuleFor(c => c.Wage)
             .GreaterThan(0).WithMessage("Wage must be greater than zero.");

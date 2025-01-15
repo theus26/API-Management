@@ -9,7 +9,7 @@ namespace API_PeopleManagement.Service.Vacation;
 
 public class VacationService(IBaseRepository<VacationRecord> vacationRepository, IMapper mapper, IValidator<VacationRecord> employeeValidator ) : IVacationService
 {
-    public VacationRecordDto CreateEmployee(CreateVacationRecordDto vacationRecordDto)
+    public VacationRecordDto CreateVacation(CreateVacationRecordDto vacationRecordDto)
     {
         var holidaysExists = vacationRepository.GetAll().FirstOrDefault(x=> x.EmployeesId == vacationRecordDto.EmployeesId);
         if (holidaysExists?.VacationStatus is VacationStatus.Pending or VacationStatus.InProgress)

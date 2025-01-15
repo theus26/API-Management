@@ -90,7 +90,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     {
         try
         {
-            var vacationRecord = vacationService.CreateEmployee(vacationRecordDto);
+            var vacationRecord = vacationService.CreateVacation(vacationRecordDto);
             return Ok(vacationRecord);
         }
         catch (Exception ex)
@@ -103,7 +103,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
         }
     }
 
-    [HttpPatch]
+    [HttpPut]
     public IActionResult UpdateEmployee([FromQuery] Guid employeeId, [FromBody] UpdateEmployeeDto employeeDto)
     {
         try

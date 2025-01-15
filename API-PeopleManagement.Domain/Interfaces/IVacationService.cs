@@ -4,5 +4,5 @@ namespace API_PeopleManagement.Domain.Interfaces;
 
 public interface IVacationService
 {
-    VacationRecordDto CreateEmployee(CreateVacationRecordDto vacationRecordDto);
+    VacationRecordDto CreateVacation(CreateVacationRecordDto vacationRecordDto);
 }

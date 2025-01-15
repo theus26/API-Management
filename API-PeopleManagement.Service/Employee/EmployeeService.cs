@@ -78,6 +78,11 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         {
             throw new KeyNotFoundException("Please, enter a valid employeeId ID");
         }
+        var employeeExist = employeeRepository.Get(employeeId);
+        if (employeeExist is null)
+        {
+            throw new KeyNotFoundException("Employee not found");
+        }
         employeeRepository.Delete(employeeId);
     }
 
