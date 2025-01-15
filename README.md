@@ -51,11 +51,7 @@ dotnet run
 
 ## Funcionalidades
 
-A API tem diversas funcionalidades, ela realizar o gerenciamento dos produtos, atravéz dos seguintes endpoints:
-
-
 Exemplo:
-
 * `GET /Employees/GetEmployeeById/{employeeId}`: Detalha um Funcionário pelo Id
 * `GET /Employees/GetAllEmployees/`: Retorna uma lista com todos os funcionários.
 * `GET /Employees/GetAverageSalary`: Retorna a média salarial dos funcionários cadastrados.
@@ -63,8 +59,6 @@ Exemplo:
 * `POST /Employees/CreateVacationRecords`: Criar registro de férias do funcionários
 * `PUT /Employees/UpdateEmployee/{employeeId}`: Atualiza um Funcionário com base nas novas informações passadas e criar um registro dos campos alterados
 * `DELETE /Employees/DeleteEmployee/{employeeId}`: Deletar um Funcionário pelo seu Id.
-
-
 
 ## Banco de Dados
 
