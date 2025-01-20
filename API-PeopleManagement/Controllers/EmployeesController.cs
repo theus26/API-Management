@@ -68,11 +68,11 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPost]
-    public IActionResult CreateEmployee([FromBody] CreateEmployeesDto employeesDto)
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeesDto employeesDto)
     {
         try
         {
-            var employee = employeeService.CreateEmployee(employeesDto);
+            var employee = await employeeService.CreateEmployee(employeesDto);
             return Ok(employee);
         }
         catch (Exception ex)

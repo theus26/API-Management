@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API-PeopleManagement.Domain\API-PeopleManagement.Domain.csproj" />
+    <ProjectReference Include="..\API-PeopleManagement.Infra.Data\API-PeopleManagement.Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>

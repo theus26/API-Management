@@ -1,5 +1,8 @@
+using API_PeopleManagement.Domain.Commands;
+using API_PeopleManagement.Domain.Commands.Employee;
 using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.Entities;
+using API_PeopleManagement.Domain.Events;
 using API_PeopleManagement.Domain.Interfaces;
 using AutoMapper;
 using FluentValidation;
@@ -9,14 +12,12 @@ namespace API_PeopleManagement.Service.Employee;
 
 public class EmployeeService(IBaseRepository<Employees> employeeRepository, 
     IMapper mapper, IValidator<Employees> employeeValidator, 
-    IChangeRecordsService changeRecordsService) : IEmployeeService
+    IChangeRecordsService changeRecordsService, EmployeeCommandHandler commandHandler) : IEmployeeService
 {
-    public EmployeeDto CreateEmployee(CreateEmployeesDto createEmployee)
+    public async Task<EmployeeInsertedEvent> CreateEmployee(CreateEmployeesDto createEmployee)
     {
-        var employee = mapper.Map<Employees>(createEmployee);
-        Validate(employee);
-        var createdEmployee = employeeRepository.Create(employee);
-        return mapper.Map<EmployeeDto>(createdEmployee);
+        var employeeCommand = mapper.Map<InsertEmployeeCommand>(createEmployee);
+        return await commandHandler.HandleCommand(employeeCommand);
     }
 
     public EmployeeDto UpdateEmployee(Guid employeeId, UpdateEmployeeDto employeeDto)

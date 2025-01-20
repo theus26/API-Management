@@ -6,16 +6,21 @@ namespace API_PeopleManagement.Service.AutoMapper;
 
 public class AutoMapperConfiguration : Profile
 {
-    public AutoMapperConfiguration()
+    public static MapperConfiguration RegisterMappings()
     {
-        CreateMap<CreateEmployeesDto, Employees>();
-        CreateMap<Employees, EmployeeDto>().ReverseMap();
+        return new MapperConfiguration(ps =>
+        {
+            ps.AddProfile(new DomainToDomainMappingProfile());
+            ps.AddProfile(new DomainToDtoMappingProfile());
+            ps.AddProfile(new DtoToDomainMappingProfile());
+        });
         
-        CreateMap<CreateVacationRecordDto, VacationRecord>();
-        CreateMap<VacationRecord, VacationRecordDto>().ReverseMap();
+        // CreateMap<CreateEmployeesDto, Employees>();
+        // CreateMap<Employees, EmployeeDto>();
+        // CreateMap<CreateVacationRecordDto, VacationRecord>();
+        // CreateMap<VacationRecord, VacationRecordDto>().ReverseMap();
+        // CreateMap<ChangeRecordDto, Domain.Entities.ChangeRecord>().ReverseMap();
 
-        CreateMap<ChangeRecordDto, Domain.Entities.ChangeRecord>().ReverseMap();
-        
-        
+
     }
 }
