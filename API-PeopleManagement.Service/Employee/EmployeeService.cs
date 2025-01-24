@@ -1,6 +1,7 @@
 using API_PeopleManagement.Domain.Commands;
 using API_PeopleManagement.Domain.Commands.Employee;
 using API_PeopleManagement.Domain.DTO;
+using API_PeopleManagement.Domain.DTO.employee;
 using API_PeopleManagement.Domain.Entities;
 using API_PeopleManagement.Domain.Events;
 using API_PeopleManagement.Domain.Interfaces;
@@ -14,7 +15,7 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
     IMapper mapper, IValidator<Employees> employeeValidator, 
     IChangeRecordsService changeRecordsService, EmployeeCommandHandler commandHandler) : IEmployeeService
 {
-    public async Task<EmployeeInsertedEvent> CreateEmployee(CreateEmployeesDto createEmployee)
+    public async Task<EventInserted> CreateEmployee(CreateEmployeesDto createEmployee)
     {
         var employeeCommand = mapper.Map<InsertEmployeeCommand>(createEmployee);
         return await commandHandler.HandleCommand(employeeCommand);
@@ -30,13 +31,21 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
 
         var changes = new Dictionary<string, (string OldValue, string? NewValue)>
         {
-            { "Name", (employee.Name, employeeDto.Name) },
-            { "Position", (employee.Position, employeeDto.Position) },
-            { "Wage", (employee.Wage.ToString(), employeeDto.Wage?.ToString()) },
+            { "NameEmployee", (employee.NameEmployee, employeeDto.NameEmployee) },
+            { "CTPS", (employee.CTPS, employeeDto.CTPS)! },
+            { "PisPasep", (employee.PisPasep, employeeDto.PisPasep)! },
+            { "DateOfBirth", (employee.DateOfBirth?.ToString("yyyy-MM-dd"), employeeDto.DateOfBirth?.ToString("yyyy-MM-dd"))! },
+            { "Rg", (employee.Rg, employeeDto.Rg)! },
+            { "Cpf", (employee.Cpf, employeeDto.Cpf)! },
+            { "EmailEmployee", (employee.EmailEmployee, employeeDto.EmailEmployee)! },
+            { "PhoneNumber", (employee.PhoneNumber, employeeDto.PhoneNumber)! },
+            { "Observations", (employee.Observations, employeeDto.Observations)! },
+            { "BankDetails", (employee.BankDetails, employeeDto.BankDetails)! },
+            { "UnitId", (employee.UnitId?.ToString(), employeeDto.UnitId?.ToString())! }
         };
 
         var historyEntries = new List<ChangeRecordDto>();
-        var changedBy = employee.Name;
+        var changedBy = employee.NameEmployee;
         foreach (var change in changes.Where(change => 
                      !string.IsNullOrEmpty(change.Value.NewValue) && change.Value.OldValue != change.Value.NewValue))
         {
@@ -52,14 +61,41 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
             
             switch (change.Key)
             {
-                case "Name":
-                    employee.Name = employeeDto.Name!;
+                case "NameEmployee":
+                    employee.NameEmployee = employeeDto.NameEmployee!;
                     break;
-                case "Position":
-                    employee.Position = employeeDto.Position!;
+                case "CTPS":
+                    employee.CTPS = employeeDto.CTPS;
                     break;
-                case "Wage":
-                    employee.Wage = employeeDto.Wage ?? employee.Wage;
+                case "PisPasep":
+                    employee.PisPasep = employeeDto.PisPasep;
+                    break;
+                case "DateOfBirth":
+                    employee.DateOfBirth = employeeDto.DateOfBirth;
+                    break;
+                case "Rg":
+                    employee.Rg = employeeDto.Rg;
+                    break;
+                case "Cpf":
+                    employee.Cpf = employeeDto.Cpf;
+                    break;
+                case "EmailEmployee":
+                    employee.EmailEmployee = employeeDto.EmailEmployee;
+                    break;
+                case "PhoneNumber":
+                    employee.PhoneNumber = employeeDto.PhoneNumber;
+                    break;
+                case "Observations":
+                    employee.Observations = employeeDto.Observations;
+                    break;
+                case "BankDetails":
+                    employee.BankDetails = employeeDto.BankDetails;
+                    break;
+                case "IsActive":
+                    employee.IsActive = employeeDto.IsActive;
+                    break;
+                case "UnitId":
+                    employee.UnitId = employeeDto.UnitId;
                     break;
             }
         }
@@ -79,12 +115,8 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         {
             throw new KeyNotFoundException("Please, enter a valid employeeId ID");
         }
-        var employeeExist = employeeRepository.Get(employeeId);
-        if (employeeExist is null)
-        {
-            throw new KeyNotFoundException("Employee not found");
-        }
-        employeeRepository.Delete(employeeId);
+        var deleteCommand = new DeleteEmployeeCommand(employeeId);
+        commandHandler.HandleCommand(deleteCommand);
     }
 
     public EmployeeDto GetEmployeeById(Guid employeeId)
@@ -98,7 +130,7 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
                     .GetAll()
                     .AsNoTracking()
                     .Where(x => x.Id == employeeId)
-                    .Include(x => x.VacationRecords)
+                    .Include(x => x.VacationRecord)
                     .FirstOrDefault();
         
         if (employees is null)
@@ -112,7 +144,7 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
     {
         var employees = employeeRepository.GetAll()
                 .Where(x => x.IsActive)
-                .Include(x => x.VacationRecords)
+                .Include(x => x.VacationRecord)
                 .AsNoTracking()
                 .ToList();
         
@@ -123,14 +155,14 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         return mapper.Map<ICollection<EmployeeDto>>(employees);
     }
 
-    public double GetAverageSalary()
-    {
-        return employeeRepository.GetAll()
-            .AsNoTracking()
-            .Where(x=> x.IsActive)
-            .Select(x => x.Wage)
-            .Average();
-    }
+    // public double GetAverageSalary()
+    // {
+    //     return employeeRepository.GetAll()
+    //         .AsNoTracking()
+    //         .Where(x=> x.IsActive)
+    //         //.Select(x => x.Wage)
+    //         //.Average();
+    // }
 
     private void Validate(Employees employees)
     {

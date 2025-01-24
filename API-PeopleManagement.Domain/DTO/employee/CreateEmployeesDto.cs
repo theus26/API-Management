@@ -1,6 +1,6 @@
-﻿namespace API_PeopleManagement.Domain.Entities;
+namespace API_PeopleManagement.Domain.DTO;
 
-public class Employees : BaseEntity
+public class CreateEmployeesDto
 {
     public string NameEmployee { get; set; }
     public string? CTPS { get; set; }
@@ -14,7 +14,4 @@ public class Employees : BaseEntity
     public string? BankDetails { get; set; }
     public bool IsActive { get; set; }
     public Guid? UnitId { get; set; }
-    public virtual Unit Unit { get; set; }
-    public virtual ICollection<EmployeePosition> EmployeePosition { get; set; }
-    public virtual ICollection<VacationRecord> VacationRecord { get; set; }
 }

@@ -24,8 +24,6 @@ public static class ApplicationExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<EmployeeCommandHandler>();
         
-        //services.AddScoped<IHandler>()
-        
         //Validate
         services.AddScoped<IValidator<Employees>, EmployeeValidator>();
         services.AddScoped<IValidator<VacationRecord>, VacationValidator>();

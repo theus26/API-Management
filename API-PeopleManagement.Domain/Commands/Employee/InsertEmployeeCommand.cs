@@ -1,4 +1,4 @@
-namespace API_PeopleManagement.Domain.Commands;
+namespace API_PeopleManagement.Domain.Commands.Employee;
 
 public class InsertEmployeeCommand
 {

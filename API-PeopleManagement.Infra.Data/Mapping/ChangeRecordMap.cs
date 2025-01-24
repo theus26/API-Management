@@ -9,8 +9,7 @@ public class ChangeRecordMap : IEntityTypeConfiguration<ChangeRecord>
     public void Configure(EntityTypeBuilder<ChangeRecord> builder)
     {
         builder.HasKey(prop => prop.Id);
-
-
+        
         builder.Property(prop => prop.DateAndTimeOfChange)
             .IsRequired()
             .HasColumnName("ChR_DateAndTimeOfChange");
@@ -31,9 +30,9 @@ public class ChangeRecordMap : IEntityTypeConfiguration<ChangeRecord>
             .IsRequired()
             .HasColumnName("ChR_ChangedBy");
 
-        builder.HasOne(x => x.Employees)
-            .WithMany(c => c.ChangeRecords)
-            .HasForeignKey(x => x.EmployeesId)
+        builder.HasOne(x => x.Users)
+            .WithMany(c => c.ChangeRecord)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 

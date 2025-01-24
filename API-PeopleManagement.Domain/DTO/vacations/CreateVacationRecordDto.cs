@@ -1,11 +1,11 @@
 using API_PeopleManagement.Domain.Enum;
 
-namespace API_PeopleManagement.Domain.DTO;
+namespace API_PeopleManagement.Domain.DTO.vacations;
 
 public class CreateVacationRecordDto
 {
-    public DateTime VacationStartDate { get; set; }
-    public DateTime VacationeEndDate { get; set; }
+    public DateTime StartedIn { get; set; }
+    public DateTime EndIn { get; set; }
     public VacationStatus VacationStatus { get; set; }
     public Guid EmployeesId { get; set; }
 }

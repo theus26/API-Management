@@ -1,4 +1,5 @@
 using API_PeopleManagement.Domain.DTO;
+using API_PeopleManagement.Domain.DTO.vacations;
 using API_PeopleManagement.Domain.Entities;
 using API_PeopleManagement.Domain.Enum;
 using API_PeopleManagement.Domain.Interfaces;
@@ -30,7 +31,7 @@ public class VacationService(IBaseRepository<VacationRecord> vacationRepository,
     
     private void Validate(VacationRecord vacationRecord)
     {
-        ValidateIntervalbetweenDatas(vacationRecord.VacationStartDate, vacationRecord.VacationeEndDate);
+        //ValidateIntervalbetweenDatas(vacationRecord.startedIn, vacationRecord.endIn);
         var validationResult = employeeValidator.Validate(vacationRecord);
         if (validationResult.IsValid) return;
         var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));

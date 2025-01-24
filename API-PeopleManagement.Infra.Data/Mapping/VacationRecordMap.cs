@@ -10,20 +10,20 @@ public class VacationRecordMap : IEntityTypeConfiguration<VacationRecord>
     {
         builder.HasKey(prop => prop.Id);
 
-        builder.Property(prop => prop.VacationStartDate)
+        builder.Property(prop => prop.StartedIn)
             .IsRequired()
-            .HasColumnName("VaR_VacationStartDate");
+            .HasColumnName("VaR_StartedIn");
 
-        builder.Property(prop => prop.VacationeEndDate)
+        builder.Property(prop => prop.EndIn)
             .IsRequired()
-            .HasColumnName("VaR_VacationeEndDate");
+            .HasColumnName("VaR_EndIn");
 
         builder.Property(prop => prop.VacationStatus)
             .IsRequired()
             .HasColumnName("VaR_VacationStatus");
 
         builder.HasOne(x => x.Employees)
-            .WithMany(c => c.VacationRecords)
+            .WithMany(c => c.VacationRecord)
             .HasForeignKey(x => x.EmployeesId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

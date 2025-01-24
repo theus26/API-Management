@@ -1,4 +1,6 @@
 using API_PeopleManagement.Domain.DTO;
+using API_PeopleManagement.Domain.DTO.employee;
+using API_PeopleManagement.Domain.DTO.vacations;
 using API_PeopleManagement.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,23 +15,23 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
         return Ok("I´am alive");
     }
     
-    [HttpGet]
-    public IActionResult GetAverageSalary()
-    {
-        try
-        {
-            var averageSalary = employeeService.GetAverageSalary();
-            return Ok(averageSalary);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(StatusCodes.Status400BadRequest, new ResponseDto()
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Error = ex.Message,
-            });
-        }
-    }
+    // [HttpGet]
+    // public IActionResult GetAverageSalary()
+    // {
+    //     try
+    //     {
+    //         var averageSalary = employeeService.GetAverageSalary();
+    //         return Ok(averageSalary);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(StatusCodes.Status400BadRequest, new ResponseDto()
+    //         {
+    //             Status = StatusCodes.Status400BadRequest,
+    //             Error = ex.Message,
+    //         });
+    //     }
+    // }
     
     [HttpGet]
     public IActionResult GetEmployeeById(Guid employeeId)
