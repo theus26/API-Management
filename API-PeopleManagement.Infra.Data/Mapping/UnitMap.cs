@@ -13,6 +13,7 @@ public class UnitMap : IEntityTypeConfiguration<Domain.Entities.Unit>
             .IsRequired()
             .HasColumnName("Uni_NameUnit");
         
+        
         builder.ToTable("Uni_Unit", "PeopleManagement");
     }
 }

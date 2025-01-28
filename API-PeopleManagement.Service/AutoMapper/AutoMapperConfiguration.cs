@@ -14,13 +14,5 @@ public class AutoMapperConfiguration : Profile
             ps.AddProfile(new DomainToDtoMappingProfile());
             ps.AddProfile(new DtoToDomainMappingProfile());
         });
-        
-        // CreateMap<CreateEmployeesDto, Employees>();
-        // CreateMap<Employees, EmployeeDto>();
-        // CreateMap<CreateVacationRecordDto, VacationRecord>();
-        // CreateMap<VacationRecord, VacationRecordDto>().ReverseMap();
-        // CreateMap<ChangeRecordDto, Domain.Entities.ChangeRecord>().ReverseMap();
-
-
     }
 }

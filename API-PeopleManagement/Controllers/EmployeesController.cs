@@ -70,11 +70,11 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeesDto employeesDto)
+    public async Task<IActionResult> CreateEmployee([FromQuery] Guid positionId, [FromBody] CreateEmployeesDto employeesDto)
     {
         try
         {
-            var employee = await employeeService.CreateEmployee(employeesDto);
+            var employee = await employeeService.CreateEmployee(positionId, employeesDto);
             return Ok(employee);
         }
         catch (Exception ex)
@@ -106,11 +106,11 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPut]
-    public IActionResult UpdateEmployee([FromQuery] Guid employeeId, [FromBody] UpdateEmployeeDto employeeDto)
+    public IActionResult UpdateEmployee([FromQuery] Guid userId, [FromBody] UpdateEmployeeDto employeeDto)
     {
         try
         {
-            var employeeUpdated = employeeService.UpdateEmployee(employeeId, employeeDto);
+            var employeeUpdated = employeeService.UpdateEmployee(userId, employeeDto);
             return Ok(employeeUpdated);
         }
         catch (Exception ex)

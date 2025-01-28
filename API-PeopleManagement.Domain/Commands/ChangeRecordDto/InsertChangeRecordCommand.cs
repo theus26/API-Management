@@ -1,6 +1,6 @@
-namespace API_PeopleManagement.Domain.DTO;
+namespace API_PeopleManagement.Domain.Commands.ChangeRecordDto;
 
-public class ChangeRecordDto
+public class InsertChangeRecordCommand
 {
     public DateTime DateAndTimeOfChange { get; set; }
     public string? ChangedField { get; set; }

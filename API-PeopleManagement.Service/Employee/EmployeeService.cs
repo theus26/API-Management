@@ -1,5 +1,6 @@
 using API_PeopleManagement.Domain.Commands;
 using API_PeopleManagement.Domain.Commands.Employee;
+using API_PeopleManagement.Domain.Commands.EmployeePosition;
 using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.DTO.employee;
 using API_PeopleManagement.Domain.Entities;
@@ -13,17 +14,24 @@ namespace API_PeopleManagement.Service.Employee;
 
 public class EmployeeService(IBaseRepository<Employees> employeeRepository, 
     IMapper mapper, IValidator<Employees> employeeValidator, 
-    IChangeRecordsService changeRecordsService, EmployeeCommandHandler commandHandler) : IEmployeeService
+    IChangeRecordsService changeRecordsService, EmployeeCommandHandler employeecommandHandler, EmployeePositionCommandHandler employeePositionCommandHandler) : IEmployeeService
 {
-    public async Task<EventInserted> CreateEmployee(CreateEmployeesDto createEmployee)
+    public async Task<EventInserted> CreateEmployee(Guid positionId, CreateEmployeesDto createEmployee)
     {
         var employeeCommand = mapper.Map<InsertEmployeeCommand>(createEmployee);
-        return await commandHandler.HandleCommand(employeeCommand);
+        var eventInserted = await employeecommandHandler.HandleCommand(employeeCommand);
+        if (eventInserted.Id != Guid.Empty)
+        {
+            var employeePositionCommand = new InsertEmployeePositionCommand(eventInserted.Id, positionId);
+            await employeePositionCommandHandler.HandleCommand(employeePositionCommand);
+        }
+
+        return eventInserted;
     }
 
-    public EmployeeDto UpdateEmployee(Guid employeeId, UpdateEmployeeDto employeeDto)
+    public EmployeeDto UpdateEmployee(Guid userId, UpdateEmployeeDto employeeDto)
     { 
-        var employee = employeeRepository.Get(employeeId);
+        var employee = employeeRepository.Get(employeeDto.Id);
         if (employee is null)
         {
             throw new KeyNotFoundException("Employee not found");
@@ -45,13 +53,13 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         };
 
         var historyEntries = new List<ChangeRecordDto>();
-        var changedBy = employee.NameEmployee;
+        var changedBy = userId.ToString();
         foreach (var change in changes.Where(change => 
                      !string.IsNullOrEmpty(change.Value.NewValue) && change.Value.OldValue != change.Value.NewValue))
         {
             historyEntries.Add(new ChangeRecordDto
             {
-                EmployeesId = employeeId,
+                UserId = userId,
                 DateAndTimeOfChange = DateTime.UtcNow,
                 ChangedField = change.Key,
                 OldValue = change.Value.OldValue,
@@ -116,7 +124,7 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
             throw new KeyNotFoundException("Please, enter a valid employeeId ID");
         }
         var deleteCommand = new DeleteEmployeeCommand(employeeId);
-        commandHandler.HandleCommand(deleteCommand);
+        employeecommandHandler.HandleCommand(deleteCommand);
     }
 
     public EmployeeDto GetEmployeeById(Guid employeeId)
@@ -131,6 +139,7 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
                     .AsNoTracking()
                     .Where(x => x.Id == employeeId)
                     .Include(x => x.VacationRecord)
+                    .Include(x => x.EmployeePosition)
                     .FirstOrDefault();
         
         if (employees is null)
@@ -143,10 +152,13 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
     public ICollection<EmployeeDto> GetAllEmployees()
     {
         var employees = employeeRepository.GetAll()
-                .Where(x => x.IsActive)
-                .Include(x => x.VacationRecord)
-                .AsNoTracking()
-                .ToList();
+            .Where(x => x.IsActive)
+            .Include(x => x.VacationRecord)
+            .Include(x => x.EmployeePosition)
+            .ThenInclude(ep => ep.Positions)
+            .AsNoTracking()
+            .ToList();
+
         
         if (employees is null)
         {
