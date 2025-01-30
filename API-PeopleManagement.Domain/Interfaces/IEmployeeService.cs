@@ -10,6 +10,6 @@ public interface IEmployeeService
     EmployeeDto UpdateEmployee(Guid userId, UpdateEmployeeDto employee);
     void DeleteEmployee(Guid employeeId);
     EmployeeDto GetEmployeeById(Guid userId);
-    ICollection<EmployeeDto> GetAllEmployees();
+    ICollection<ListEmployeeDto> GetAllEmployees();
     //double GetAverageSalary();
 }

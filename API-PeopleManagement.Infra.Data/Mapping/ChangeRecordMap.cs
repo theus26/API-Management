@@ -35,6 +35,12 @@ public class ChangeRecordMap : IEntityTypeConfiguration<ChangeRecord>
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
+        
+        builder.HasOne(x => x.Employees)
+            .WithMany(c => c.ChangeRecords)
+            .HasForeignKey(x => x.EmployeesId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
 
         builder.ToTable("ChR_ChangeRecord", "PeopleManagement");

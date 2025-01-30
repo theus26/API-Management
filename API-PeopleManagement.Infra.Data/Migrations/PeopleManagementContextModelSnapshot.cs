@@ -42,6 +42,9 @@ namespace API_PeopleManagement.Infra.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("ChR_DateAndTimeOfChange");
 
+                    b.Property<Guid>("EmployeesId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("NewValue")
                         .IsRequired()
                         .HasColumnType("text")
@@ -56,6 +59,8 @@ namespace API_PeopleManagement.Infra.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeesId");
 
                     b.HasIndex("UserId");
 
@@ -251,11 +256,19 @@ namespace API_PeopleManagement.Infra.Data.Migrations
 
             modelBuilder.Entity("API_PeopleManagement.Domain.Entities.ChangeRecord", b =>
                 {
+                    b.HasOne("API_PeopleManagement.Domain.Entities.Employees", "Employees")
+                        .WithMany("ChangeRecords")
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API_PeopleManagement.Domain.Entities.Users", "Users")
                         .WithMany("ChangeRecord")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employees");
 
                     b.Navigation("Users");
                 });
@@ -301,6 +314,8 @@ namespace API_PeopleManagement.Infra.Data.Migrations
 
             modelBuilder.Entity("API_PeopleManagement.Domain.Entities.Employees", b =>
                 {
+                    b.Navigation("ChangeRecords");
+
                     b.Navigation("EmployeePosition");
 
                     b.Navigation("VacationRecord");

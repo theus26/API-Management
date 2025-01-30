@@ -17,4 +17,5 @@ public class Employees : BaseEntity
     public virtual Unit Unit { get; set; }
     public virtual ICollection<EmployeePosition> EmployeePosition { get; set; }
     public virtual ICollection<VacationRecord> VacationRecord { get; set; }
+    public virtual ICollection<ChangeRecord> ChangeRecords { get; set; }
 }

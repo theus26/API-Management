@@ -53,6 +53,11 @@ public class EmployeesMap : IEntityTypeConfiguration<Employees>
             .HasForeignKey(prop => prop.EmployeesId)
             .OnDelete(DeleteBehavior.Cascade);
         
+        builder.HasMany(prop => prop.ChangeRecords)
+            .WithOne(prop => prop.Employees)
+            .HasForeignKey(prop => prop.EmployeesId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         builder.ToTable("Emp_Employees", "PeopleManagement");
     }
 }

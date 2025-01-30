@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API_PeopleManagement.Infra.Data.Migrations
 {
     [DbContext(typeof(PeopleManagementContext))]
-    [Migration("20250124183315_AlterSchemeForNewSystemByUser")]
-    partial class AlterSchemeForNewSystemByUser
+    [Migration("20250128233447_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,9 @@ namespace API_PeopleManagement.Infra.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("ChR_DateAndTimeOfChange");
 
+                    b.Property<Guid>("EmployeesId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("NewValue")
                         .IsRequired()
                         .HasColumnType("text")
@@ -59,6 +62,8 @@ namespace API_PeopleManagement.Infra.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeesId");
 
                     b.HasIndex("UserId");
 
@@ -149,6 +154,8 @@ namespace API_PeopleManagement.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UnitId");
+
                     b.ToTable("Emp_Employees", "PeopleManagement");
                 });
 
@@ -182,18 +189,12 @@ namespace API_PeopleManagement.Infra.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("NameUnit")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("Uni_NameUnit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
 
                     b.ToTable("Uni_Unit", "PeopleManagement");
                 });
@@ -258,11 +259,19 @@ namespace API_PeopleManagement.Infra.Data.Migrations
 
             modelBuilder.Entity("API_PeopleManagement.Domain.Entities.ChangeRecord", b =>
                 {
+                    b.HasOne("API_PeopleManagement.Domain.Entities.Employees", "Employees")
+                        .WithMany("ChangeRecords")
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API_PeopleManagement.Domain.Entities.Users", "Users")
                         .WithMany("ChangeRecord")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employees");
 
                     b.Navigation("Users");
                 });
@@ -286,15 +295,13 @@ namespace API_PeopleManagement.Infra.Data.Migrations
                     b.Navigation("Positions");
                 });
 
-            modelBuilder.Entity("API_PeopleManagement.Domain.Entities.Unit", b =>
+            modelBuilder.Entity("API_PeopleManagement.Domain.Entities.Employees", b =>
                 {
-                    b.HasOne("API_PeopleManagement.Domain.Entities.Employees", "Employees")
-                        .WithOne("Unit")
-                        .HasForeignKey("API_PeopleManagement.Domain.Entities.Unit", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("API_PeopleManagement.Domain.Entities.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId");
 
-                    b.Navigation("Employees");
+                    b.Navigation("Unit");
                 });
 
             modelBuilder.Entity("API_PeopleManagement.Domain.Entities.VacationRecord", b =>
@@ -310,10 +317,9 @@ namespace API_PeopleManagement.Infra.Data.Migrations
 
             modelBuilder.Entity("API_PeopleManagement.Domain.Entities.Employees", b =>
                 {
-                    b.Navigation("EmployeePosition");
+                    b.Navigation("ChangeRecords");
 
-                    b.Navigation("Unit")
-                        .IsRequired();
+                    b.Navigation("EmployeePosition");
 
                     b.Navigation("VacationRecord");
                 });

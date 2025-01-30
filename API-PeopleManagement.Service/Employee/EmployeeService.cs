@@ -149,22 +149,23 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         return mapper.Map<EmployeeDto>(employees);
     }
 
-    public ICollection<EmployeeDto> GetAllEmployees()
+    public ICollection<ListEmployeeDto> GetAllEmployees()
     {
         var employees = employeeRepository.GetAll()
             .Where(x => x.IsActive)
             .Include(x => x.VacationRecord)
+            .Include(x => x.ChangeRecords)
             .Include(x => x.EmployeePosition)
             .ThenInclude(ep => ep.Positions)
             .AsNoTracking()
-            .ToList();
+            .AsQueryable();
 
         
         if (employees is null)
         {
             throw new Exception("employees not found");
         }
-        return mapper.Map<ICollection<EmployeeDto>>(employees);
+        return mapper.Map<ICollection<ListEmployeeDto>>(employees);
     }
 
     // public double GetAverageSalary()

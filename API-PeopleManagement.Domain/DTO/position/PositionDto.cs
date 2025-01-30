@@ -1,3 +1,5 @@
+using API_PeopleManagement.Domain.DTO.employeePosition;
+
 namespace API_PeopleManagement.Domain.DTO.position;
 
 public class PositionDto
