@@ -4,6 +4,7 @@ using API_PeopleManagement.Domain.Commands.Employee;
 using API_PeopleManagement.Domain.Commands.EmployeePosition;
 using API_PeopleManagement.Domain.Commands.Position;
 using API_PeopleManagement.Domain.Commands.Unit;
+using API_PeopleManagement.Domain.Commands.Vacations;
 using API_PeopleManagement.Domain.Entities;
 using AutoMapper;
 
@@ -18,5 +19,6 @@ public class DomainToDomainMappingProfile : Profile
         CreateMap<InsertUnitCommand, Domain.Entities.Unit>();
         CreateMap<InsertEmployeePositionCommand, EmployeePosition>();
         CreateMap<InsertChangeRecordCommand, Domain.Entities.ChangeRecord>();
+        CreateMap<InsertVacationsCommand, Domain.Entities.VacationRecord>();
     }
 }

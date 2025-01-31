@@ -1,10 +1,12 @@
 using API_PeopleManagement.Domain.Commands;
+using API_PeopleManagement.Domain.Commands.ChangeRecord;
 using API_PeopleManagement.Domain.Commands.ChangeRecordDto;
 using API_PeopleManagement.Domain.Commands.Employee;
 using API_PeopleManagement.Domain.Commands.EmployeePosition;
 using API_PeopleManagement.Domain.Commands.Position;
 using API_PeopleManagement.Domain.Commands.Unit;
 using API_PeopleManagement.Domain.Commands.User;
+using API_PeopleManagement.Domain.Commands.Vacations;
 using API_PeopleManagement.Domain.Entities;
 using API_PeopleManagement.Domain.Interfaces;
 using API_PeopleManagement.Service;
@@ -38,6 +40,7 @@ public static class ApplicationExtensions
         services.AddScoped<UnitCommandHandler>();
         services.AddScoped<UserCommandHandler>();
         services.AddScoped<ChangeRecordCommandHandler>();
+        services.AddScoped<VacationCommandHandler>();
         
         
         //Validate

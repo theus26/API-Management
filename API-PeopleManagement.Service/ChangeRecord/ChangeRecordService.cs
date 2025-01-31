@@ -1,3 +1,4 @@
+using API_PeopleManagement.Domain.Commands.ChangeRecord;
 using API_PeopleManagement.Domain.Commands.ChangeRecordDto;
 using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.Interfaces;

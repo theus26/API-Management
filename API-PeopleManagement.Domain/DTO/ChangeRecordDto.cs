@@ -8,4 +8,5 @@ public class ChangeRecordDto
     public string? NewValue { get; set; }
     public string? ChangedBy { get; set; }
     public Guid UserId { get; set; }
+    public Guid EmployeesId { get; set; }
 }

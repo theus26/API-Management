@@ -16,7 +16,7 @@ public class UnitController(IUnitService unitService) : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetAllPositions()
+    public IActionResult GetAllUnits()
     {
         try
         {
@@ -34,7 +34,7 @@ public class UnitController(IUnitService unitService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePosition([FromBody] CreateUnitDto unitDto)
+    public async Task<IActionResult> CreateUnit([FromBody] CreateUnitDto unitDto)
     {
         try
         {

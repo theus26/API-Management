@@ -6,5 +6,6 @@ public enum Roles
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     Admin = 1,
-    Agent = 2,
+    Exec = 2,
+    Fin = 3,
 }

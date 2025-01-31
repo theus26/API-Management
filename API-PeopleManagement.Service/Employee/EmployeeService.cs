@@ -60,6 +60,7 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
             historyEntries.Add(new ChangeRecordDto
             {
                 UserId = userId,
+                EmployeesId = employeeDto.Id,
                 DateAndTimeOfChange = DateTime.UtcNow,
                 ChangedField = change.Key,
                 OldValue = change.Value.OldValue,

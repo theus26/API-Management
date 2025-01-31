@@ -88,11 +88,11 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpPost]
-    public IActionResult CreateVacationRecords([FromBody] CreateVacationRecordDto vacationRecordDto)
+    public async Task<IActionResult> CreateVacationRecords([FromBody] CreateVacationRecordDto vacationRecordDto)
     {
         try
         {
-            var vacationRecord = vacationService.CreateVacation(vacationRecordDto);
+            var vacationRecord = await vacationService.CreateVacation(vacationRecordDto);
             return Ok(vacationRecord);
         }
         catch (Exception ex)
