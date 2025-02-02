@@ -168,22 +168,4 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         }
         return mapper.Map<ICollection<ListEmployeeDto>>(employees);
     }
-
-    // public double GetAverageSalary()
-    // {
-    //     return employeeRepository.GetAll()
-    //         .AsNoTracking()
-    //         .Where(x=> x.IsActive)
-    //         //.Select(x => x.Wage)
-    //         //.Average();
-    // }
-
-    private void Validate(Employees employees)
-    {
-        var validationResult = employeeValidator.Validate(employees);
-
-        if (validationResult.IsValid) return;
-        var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
-        throw new ValidationException($"Validation failed: {errors}");
-    }
 }

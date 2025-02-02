@@ -25,5 +25,6 @@ public class DtoToDomainMappingProfile : Profile
         CreateMap<CreateUnitDto, InsertUnitCommand>();
         CreateMap<ChangeRecordDto, InsertChangeRecordCommand>();
         CreateMap<CreateVacationRecordDto, InsertVacationsCommand>();
+        CreateMap<UnitDto, UpdateUnitCommand>();
     }
 }

@@ -1,3 +1,4 @@
+using API_PeopleManagement.Authenticate;
 using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.DTO.employee;
 using API_PeopleManagement.Domain.DTO.vacations;
@@ -15,25 +16,8 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
         return Ok("I´am alive");
     }
     
-    // [HttpGet]
-    // public IActionResult GetAverageSalary()
-    // {
-    //     try
-    //     {
-    //         var averageSalary = employeeService.GetAverageSalary();
-    //         return Ok(averageSalary);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return StatusCode(StatusCodes.Status400BadRequest, new ResponseDto()
-    //         {
-    //             Status = StatusCodes.Status400BadRequest,
-    //             Error = ex.Message,
-    //         });
-    //     }
-    // }
-    
     [HttpGet]
+    [ManagementAuthenticate(Roles = "Adm, Exe, Fin")]
     public IActionResult GetEmployeeById(Guid employeeId)
     {
         try
@@ -52,6 +36,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpGet]
+    [ManagementAuthenticate(Roles = "Adm, Exe, Fin")]
     public IActionResult GetAllEmployees()
     {
         try
@@ -70,6 +55,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPost]
+    [ManagementAuthenticate(Roles = "Adm")]
     public async Task<IActionResult> CreateEmployee([FromQuery] Guid positionId, [FromBody] CreateEmployeesDto employeesDto)
     {
         try
@@ -106,6 +92,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPut]
+    [ManagementAuthenticate(Roles = "Adm")]
     public IActionResult UpdateEmployee([FromQuery] Guid userId, [FromBody] UpdateEmployeeDto employeeDto)
     {
         try
@@ -124,6 +111,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpDelete]
+    [ManagementAuthenticate(Roles = "Adm")]
     public IActionResult DeleteEmployee([FromQuery] Guid employeeId)
     {
         try

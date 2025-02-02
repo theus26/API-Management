@@ -1,6 +1,6 @@
+using API_PeopleManagement.Authenticate;
 using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.DTO.employee;
-using API_PeopleManagement.Domain.DTO.position;
 using API_PeopleManagement.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +16,7 @@ public class UnitController(IUnitService unitService) : ControllerBase
     }
     
     [HttpGet]
+    [ManagementAuthenticate(Roles = "Adm")]
     public IActionResult GetAllUnits()
     {
         try
@@ -34,6 +35,7 @@ public class UnitController(IUnitService unitService) : ControllerBase
     }
 
     [HttpPost]
+    [ManagementAuthenticate(Roles = "Adm")]
     public async Task<IActionResult> CreateUnit([FromBody] CreateUnitDto unitDto)
     {
         try
@@ -50,8 +52,28 @@ public class UnitController(IUnitService unitService) : ControllerBase
             });
         }
     }
+
+    [HttpPut]
+    [ManagementAuthenticate(Roles = "Adm")]
+    public IActionResult UpdateUnit(UnitDto unitDto)
+    {
+        try
+        {
+            var unit = unitService.UpdateUnit(unitDto);
+            return Ok(unit);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, new ResponseDto()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Error = ex.Message,
+            });
+        }
+    }
     
     [HttpDelete]
+    [ManagementAuthenticate(Roles = "Adm")]
     public IActionResult DeleteUnit([FromQuery] Guid unitId)
     {
         try

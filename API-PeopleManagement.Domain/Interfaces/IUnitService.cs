@@ -8,5 +8,6 @@ public interface IUnitService
 {
     Task<EventInserted> CreateUnit(CreateUnitDto createUnit);
     IEnumerable<UnitDto> GetAllUnits();
+    UnitDto UpdateUnit(UnitDto updateUnit);
     void DeleteUnit(Guid unitId);
 }

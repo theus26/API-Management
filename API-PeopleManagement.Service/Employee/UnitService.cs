@@ -23,6 +23,13 @@ public class UnitService(IBaseRepository<Unit> unitRepository,
        return !units.Any() ? [] : mapper.Map<IEnumerable<UnitDto>>(units);
     }
 
+    public UnitDto UpdateUnit(UnitDto updateUnit)
+    {
+        var unitCommand = mapper.Map<UpdateUnitCommand>(updateUnit);
+        commandHandler.HandleCommand(unitCommand);
+        return updateUnit;
+    }
+
     public void DeleteUnit(Guid unitId)
     {
         var deleteCommand = new DeleteUnitCommand(unitId);

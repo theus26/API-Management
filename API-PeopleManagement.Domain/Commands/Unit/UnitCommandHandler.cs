@@ -17,11 +17,22 @@ public class UnitCommandHandler(IBaseRepository<Entities.Unit> unitRepository,IM
     
     public void HandleCommand(DeleteUnitCommand deleteUnitCommand)
     {
-        var employee = unitRepository.Get(deleteUnitCommand.UnitId);
-        if (employee == null)
+        var unit = unitRepository.Get(deleteUnitCommand.UnitId);
+        if (unit == null)
+        {
+            throw new KeyNotFoundException("unit not found");
+        }
+        unitRepository.Delete(deleteUnitCommand.UnitId);
+    }
+    
+    public void HandleCommand(UpdateUnitCommand updateUnitCommand)
+    {
+        var unit = unitRepository.Get(updateUnitCommand.UnitId);
+        if (unit == null)
         {
             throw new KeyNotFoundException("Employee not found");
         }
-        unitRepository.Delete(deleteUnitCommand.UnitId);
+        unit.NameUnit = updateUnitCommand.NameUnit;
+        unitRepository.Update(unit);
     }
 }

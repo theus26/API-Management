@@ -15,10 +15,11 @@ public class DomainToDomainMappingProfile : Profile
     public DomainToDomainMappingProfile()
     {
         CreateMap<InsertEmployeeCommand, Employees>();
-        CreateMap<InsertPositionCommand, Domain.Entities.Positions>();
-        CreateMap<InsertUnitCommand, Domain.Entities.Unit>();
+        CreateMap<InsertUnitCommand, Unit>();
         CreateMap<InsertEmployeePositionCommand, EmployeePosition>();
+        CreateMap<InsertVacationsCommand, VacationRecord>();
+        CreateMap<UpdateUnitCommand, Unit>();
+        CreateMap<InsertPositionCommand, Domain.Entities.Positions>();
         CreateMap<InsertChangeRecordCommand, Domain.Entities.ChangeRecord>();
-        CreateMap<InsertVacationsCommand, Domain.Entities.VacationRecord>();
     }
 }

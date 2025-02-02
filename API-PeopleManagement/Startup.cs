@@ -11,8 +11,16 @@ namespace API_PeopleManagement
             services.AddControllers();
             services.AddInfrastructure(configuration);
             services.AddApplication();
+            services.AddAuth();
             services.AddAutoMapper(typeof(AutoMapperConfiguration));
             services.AddEndpointsApiExplorer();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy(name: OpenCors,
@@ -39,6 +47,7 @@ namespace API_PeopleManagement
             app.UseCors(OpenCors);
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

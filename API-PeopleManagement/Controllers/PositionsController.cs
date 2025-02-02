@@ -1,3 +1,4 @@
+using API_PeopleManagement.Authenticate;
 using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.DTO.position;
 using API_PeopleManagement.Domain.Interfaces;
@@ -14,25 +15,8 @@ public class PositionsController(IPositionService positionService) : ControllerB
         return Ok("I´am alive");
     }
     
-    // [HttpGet]
-    // public IActionResult GetEmployeeById(Guid employeeId)
-    // {
-    //     try
-    //     {
-    //         var employee = positionService.(employeeId);
-    //         return Ok(employee);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return StatusCode(StatusCodes.Status400BadRequest, new ResponseDto()
-    //         {
-    //             Status = StatusCodes.Status400BadRequest,
-    //             Error = ex.Message,
-    //         });
-    //     }
-    // }
-    
     [HttpGet]
+    [ManagementAuthenticate(Roles = "Exe, Adm")]
     public IActionResult GetAllPositions()
     {
         try
@@ -51,6 +35,7 @@ public class PositionsController(IPositionService positionService) : ControllerB
     }
 
     [HttpPost]
+    [ManagementAuthenticate(Roles = "Exe")]
     public async Task<IActionResult> CreatePosition([FromBody] CreatePositionDto positionDto)
     {
         try
@@ -70,6 +55,7 @@ public class PositionsController(IPositionService positionService) : ControllerB
     
 
     [HttpPut]
+    [ManagementAuthenticate(Roles = "Exe")]
     public IActionResult UpdatePosition([FromBody] UpdatePositionDto positionDto)
     {
         try
@@ -88,6 +74,7 @@ public class PositionsController(IPositionService positionService) : ControllerB
     }
     
     [HttpDelete]
+    [ManagementAuthenticate(Roles = "Exe")]
     public IActionResult DeletePosition([FromQuery] Guid positionId)
     {
         try

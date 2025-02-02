@@ -2,8 +2,10 @@ using API_PeopleManagement.Domain.DTO;
 using API_PeopleManagement.Domain.DTO.employee;
 using API_PeopleManagement.Domain.DTO.employeePosition;
 using API_PeopleManagement.Domain.DTO.position;
+using API_PeopleManagement.Domain.DTO.user;
 using API_PeopleManagement.Domain.DTO.vacations;
 using API_PeopleManagement.Domain.Entities;
+using API_PeopleManagement.Service.User;
 using AutoMapper;
 
 namespace API_PeopleManagement.Service.AutoMapper;
@@ -17,5 +19,6 @@ public class DomainToDtoMappingProfile : Profile
         CreateMap<EmployeePosition, EmployeePositionDto>();
         CreateMap<VacationRecord, VacationRecordDto>();
         CreateMap<Unit, UnitDto>();
+        CreateMap<Users, UserDto>();
     }
 }

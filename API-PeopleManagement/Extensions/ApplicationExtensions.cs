@@ -13,6 +13,7 @@ using API_PeopleManagement.Service;
 using API_PeopleManagement.Service.ChangeRecord;
 using API_PeopleManagement.Service.Employee;
 using API_PeopleManagement.Service.Positions;
+using API_PeopleManagement.Service.User;
 using API_PeopleManagement.Service.Vacation;
 using API_PeopleManagement.Service.Validators;
 using FluentValidation;
@@ -30,6 +31,8 @@ public static class ApplicationExtensions
         services.AddScoped<IUnitService, UnitService>();
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IChangeRecordsService, ChangeRecordService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserService, UserService>();
         
         
         // Handler

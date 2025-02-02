@@ -5,7 +5,7 @@ namespace API_PeopleManagement.Domain.Enum;
 public enum Roles
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    Admin = 1,
-    Exec = 2,
+    Adm = 1,
+    Exe = 2,
     Fin = 3,
 }
