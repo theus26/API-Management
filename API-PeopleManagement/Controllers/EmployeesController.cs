@@ -1,4 +1,7 @@
+using API_PeopleManagement.Authenticate;
 using API_PeopleManagement.Domain.DTO;
+using API_PeopleManagement.Domain.DTO.employee;
+using API_PeopleManagement.Domain.DTO.vacations;
 using API_PeopleManagement.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,24 +17,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpGet]
-    public IActionResult GetAverageSalary()
-    {
-        try
-        {
-            var averageSalary = employeeService.GetAverageSalary();
-            return Ok(averageSalary);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(StatusCodes.Status400BadRequest, new ResponseDto()
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Error = ex.Message,
-            });
-        }
-    }
-    
-    [HttpGet]
+    [ManagementAuthenticate(Roles = "Adm, Exe, Fin")]
     public IActionResult GetEmployeeById(Guid employeeId)
     {
         try
@@ -50,6 +36,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpGet]
+    [ManagementAuthenticate(Roles = "Adm, Exe, Fin")]
     public IActionResult GetAllEmployees()
     {
         try
@@ -68,11 +55,12 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPost]
-    public IActionResult CreateEmployee([FromBody] CreateEmployeesDto employeesDto)
+    [ManagementAuthenticate(Roles = "Adm")]
+    public async Task<IActionResult> CreateEmployee([FromQuery] Guid positionId, [FromBody] CreateEmployeesDto employeesDto)
     {
         try
         {
-            var employee = employeeService.CreateEmployee(employeesDto);
+            var employee = await employeeService.CreateEmployee(positionId, employeesDto);
             return Ok(employee);
         }
         catch (Exception ex)
@@ -86,11 +74,11 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpPost]
-    public IActionResult CreateVacationRecords([FromBody] CreateVacationRecordDto vacationRecordDto)
+    public async Task<IActionResult> CreateVacationRecords([FromBody] CreateVacationRecordDto vacationRecordDto)
     {
         try
         {
-            var vacationRecord = vacationService.CreateVacation(vacationRecordDto);
+            var vacationRecord = await vacationService.CreateVacation(vacationRecordDto);
             return Ok(vacationRecord);
         }
         catch (Exception ex)
@@ -104,11 +92,12 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
 
     [HttpPut]
-    public IActionResult UpdateEmployee([FromQuery] Guid employeeId, [FromBody] UpdateEmployeeDto employeeDto)
+    [ManagementAuthenticate(Roles = "Adm")]
+    public IActionResult UpdateEmployee([FromQuery] Guid userId, [FromBody] UpdateEmployeeDto employeeDto)
     {
         try
         {
-            var employeeUpdated = employeeService.UpdateEmployee(employeeId, employeeDto);
+            var employeeUpdated = employeeService.UpdateEmployee(userId, employeeDto);
             return Ok(employeeUpdated);
         }
         catch (Exception ex)
@@ -122,6 +111,7 @@ public class EmployeesController(IEmployeeService employeeService, IVacationServ
     }
     
     [HttpDelete]
+    [ManagementAuthenticate(Roles = "Adm")]
     public IActionResult DeleteEmployee([FromQuery] Guid employeeId)
     {
         try

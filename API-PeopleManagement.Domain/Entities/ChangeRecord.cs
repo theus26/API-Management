@@ -7,6 +7,8 @@ public class ChangeRecord : BaseEntity
     public string OldValue { get; set; }
     public string NewValue { get; set; }
     public string ChangedBy { get; set; }
+    public virtual Users Users { get; set; }
+    public virtual Guid UserId { get; set; }
     public virtual Employees Employees { get; set; }
     public virtual Guid EmployeesId { get; set; }
 }

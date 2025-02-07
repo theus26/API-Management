@@ -18,6 +18,10 @@ namespace API_PeopleManagement.Extensions
             services.AddScoped<IBaseRepository<Employees>, BaseRepository<Employees>>();
             services.AddScoped<IBaseRepository<ChangeRecord>, BaseRepository<ChangeRecord>>();
             services.AddScoped<IBaseRepository<VacationRecord>, BaseRepository<VacationRecord>>();
+            services.AddScoped<IBaseRepository<Users>, BaseRepository<Users>>();
+            services.AddScoped<IBaseRepository<Unit>, BaseRepository<Unit>>();
+            services.AddScoped<IBaseRepository<Positions>, BaseRepository<Positions>>();
+            services.AddScoped<IBaseRepository<EmployeePosition>, BaseRepository<EmployeePosition>>();
      
             return services;
         }

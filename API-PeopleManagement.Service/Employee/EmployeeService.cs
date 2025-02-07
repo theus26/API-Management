@@ -1,5 +1,10 @@
+using API_PeopleManagement.Domain.Commands;
+using API_PeopleManagement.Domain.Commands.Employee;
+using API_PeopleManagement.Domain.Commands.EmployeePosition;
 using API_PeopleManagement.Domain.DTO;
+using API_PeopleManagement.Domain.DTO.employee;
 using API_PeopleManagement.Domain.Entities;
+using API_PeopleManagement.Domain.Events;
 using API_PeopleManagement.Domain.Interfaces;
 using AutoMapper;
 using FluentValidation;
@@ -9,19 +14,24 @@ namespace API_PeopleManagement.Service.Employee;
 
 public class EmployeeService(IBaseRepository<Employees> employeeRepository, 
     IMapper mapper, IValidator<Employees> employeeValidator, 
-    IChangeRecordsService changeRecordsService) : IEmployeeService
+    IChangeRecordsService changeRecordsService, EmployeeCommandHandler employeecommandHandler, EmployeePositionCommandHandler employeePositionCommandHandler) : IEmployeeService
 {
-    public EmployeeDto CreateEmployee(CreateEmployeesDto createEmployee)
+    public async Task<EventInserted> CreateEmployee(Guid positionId, CreateEmployeesDto createEmployee)
     {
-        var employee = mapper.Map<Employees>(createEmployee);
-        Validate(employee);
-        var createdEmployee = employeeRepository.Create(employee);
-        return mapper.Map<EmployeeDto>(createdEmployee);
+        var employeeCommand = mapper.Map<InsertEmployeeCommand>(createEmployee);
+        var eventInserted = await employeecommandHandler.HandleCommand(employeeCommand);
+        if (eventInserted.Id != Guid.Empty)
+        {
+            var employeePositionCommand = new InsertEmployeePositionCommand(eventInserted.Id, positionId);
+            await employeePositionCommandHandler.HandleCommand(employeePositionCommand);
+        }
+
+        return eventInserted;
     }
 
-    public EmployeeDto UpdateEmployee(Guid employeeId, UpdateEmployeeDto employeeDto)
+    public EmployeeDto UpdateEmployee(Guid userId, UpdateEmployeeDto employeeDto)
     { 
-        var employee = employeeRepository.Get(employeeId);
+        var employee = employeeRepository.Get(employeeDto.Id);
         if (employee is null)
         {
             throw new KeyNotFoundException("Employee not found");
@@ -29,19 +39,28 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
 
         var changes = new Dictionary<string, (string OldValue, string? NewValue)>
         {
-            { "Name", (employee.Name, employeeDto.Name) },
-            { "Position", (employee.Position, employeeDto.Position) },
-            { "Wage", (employee.Wage.ToString(), employeeDto.Wage?.ToString()) },
+            { "NameEmployee", (employee.NameEmployee, employeeDto.NameEmployee) },
+            { "CTPS", (employee.CTPS, employeeDto.CTPS)! },
+            { "PisPasep", (employee.PisPasep, employeeDto.PisPasep)! },
+            { "DateOfBirth", (employee.DateOfBirth?.ToString("yyyy-MM-dd"), employeeDto.DateOfBirth?.ToString("yyyy-MM-dd"))! },
+            { "Rg", (employee.Rg, employeeDto.Rg)! },
+            { "Cpf", (employee.Cpf, employeeDto.Cpf)! },
+            { "EmailEmployee", (employee.EmailEmployee, employeeDto.EmailEmployee)! },
+            { "PhoneNumber", (employee.PhoneNumber, employeeDto.PhoneNumber)! },
+            { "Observations", (employee.Observations, employeeDto.Observations)! },
+            { "BankDetails", (employee.BankDetails, employeeDto.BankDetails)! },
+            { "UnitId", (employee.UnitId?.ToString(), employeeDto.UnitId?.ToString())! }
         };
 
         var historyEntries = new List<ChangeRecordDto>();
-        var changedBy = employee.Name;
+        var changedBy = userId.ToString();
         foreach (var change in changes.Where(change => 
                      !string.IsNullOrEmpty(change.Value.NewValue) && change.Value.OldValue != change.Value.NewValue))
         {
             historyEntries.Add(new ChangeRecordDto
             {
-                EmployeesId = employeeId,
+                UserId = userId,
+                EmployeesId = employeeDto.Id,
                 DateAndTimeOfChange = DateTime.UtcNow,
                 ChangedField = change.Key,
                 OldValue = change.Value.OldValue,
@@ -51,14 +70,41 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
             
             switch (change.Key)
             {
-                case "Name":
-                    employee.Name = employeeDto.Name!;
+                case "NameEmployee":
+                    employee.NameEmployee = employeeDto.NameEmployee!;
                     break;
-                case "Position":
-                    employee.Position = employeeDto.Position!;
+                case "CTPS":
+                    employee.CTPS = employeeDto.CTPS;
                     break;
-                case "Wage":
-                    employee.Wage = employeeDto.Wage ?? employee.Wage;
+                case "PisPasep":
+                    employee.PisPasep = employeeDto.PisPasep;
+                    break;
+                case "DateOfBirth":
+                    employee.DateOfBirth = employeeDto.DateOfBirth;
+                    break;
+                case "Rg":
+                    employee.Rg = employeeDto.Rg;
+                    break;
+                case "Cpf":
+                    employee.Cpf = employeeDto.Cpf;
+                    break;
+                case "EmailEmployee":
+                    employee.EmailEmployee = employeeDto.EmailEmployee;
+                    break;
+                case "PhoneNumber":
+                    employee.PhoneNumber = employeeDto.PhoneNumber;
+                    break;
+                case "Observations":
+                    employee.Observations = employeeDto.Observations;
+                    break;
+                case "BankDetails":
+                    employee.BankDetails = employeeDto.BankDetails;
+                    break;
+                case "IsActive":
+                    employee.IsActive = employeeDto.IsActive;
+                    break;
+                case "UnitId":
+                    employee.UnitId = employeeDto.UnitId;
                     break;
             }
         }
@@ -78,12 +124,8 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         {
             throw new KeyNotFoundException("Please, enter a valid employeeId ID");
         }
-        var employeeExist = employeeRepository.Get(employeeId);
-        if (employeeExist is null)
-        {
-            throw new KeyNotFoundException("Employee not found");
-        }
-        employeeRepository.Delete(employeeId);
+        var deleteCommand = new DeleteEmployeeCommand(employeeId);
+        employeecommandHandler.HandleCommand(deleteCommand);
     }
 
     public EmployeeDto GetEmployeeById(Guid employeeId)
@@ -97,7 +139,8 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
                     .GetAll()
                     .AsNoTracking()
                     .Where(x => x.Id == employeeId)
-                    .Include(x => x.VacationRecords)
+                    .Include(x => x.VacationRecord)
+                    .Include(x => x.EmployeePosition)
                     .FirstOrDefault();
         
         if (employees is null)
@@ -107,36 +150,22 @@ public class EmployeeService(IBaseRepository<Employees> employeeRepository,
         return mapper.Map<EmployeeDto>(employees);
     }
 
-    public ICollection<EmployeeDto> GetAllEmployees()
+    public ICollection<ListEmployeeDto> GetAllEmployees()
     {
         var employees = employeeRepository.GetAll()
-                .Where(x => x.IsActive)
-                .Include(x => x.VacationRecords)
-                .AsNoTracking()
-                .ToList();
+            .Where(x => x.IsActive)
+            .Include(x => x.VacationRecord)
+            .Include(x => x.ChangeRecords)
+            .Include(x => x.EmployeePosition)
+            .ThenInclude(ep => ep.Positions)
+            .AsNoTracking()
+            .AsQueryable();
+
         
         if (employees is null)
         {
             throw new Exception("employees not found");
         }
-        return mapper.Map<ICollection<EmployeeDto>>(employees);
-    }
-
-    public double GetAverageSalary()
-    {
-        return employeeRepository.GetAll()
-            .AsNoTracking()
-            .Where(x=> x.IsActive)
-            .Select(x => x.Wage)
-            .Average();
-    }
-
-    private void Validate(Employees employees)
-    {
-        var validationResult = employeeValidator.Validate(employees);
-
-        if (validationResult.IsValid) return;
-        var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
-        throw new ValidationException($"Validation failed: {errors}");
+        return mapper.Map<ICollection<ListEmployeeDto>>(employees);
     }
 }
